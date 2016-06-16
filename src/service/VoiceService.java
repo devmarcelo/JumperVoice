@@ -69,20 +69,20 @@ public class VoiceService extends Service {
 
 		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 		//remove beep
-//		audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
-//		audioManager.setStreamMute(AudioManager.STREAM_ALARM, true);
-//		audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-//		audioManager.setStreamMute(AudioManager.STREAM_RING, true);
-//		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+		audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+		audioManager.setStreamMute(AudioManager.STREAM_ALARM, true);
+		audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+		audioManager.setStreamMute(AudioManager.STREAM_RING, true);
+		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 
 		speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
 		speech.setRecognitionListener(new SpeechRecognitionListener());
 
-//		recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US");
-//		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
-//		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+		recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US");
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 
 		localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
