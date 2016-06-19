@@ -21,8 +21,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
+import android.widget.Toast;
 import manager.ResourcesManager;
 import manager.SceneManager;
+import manager.SceneManager.SceneType;
 import service.VoiceService;
 
 public class GameActivity extends BaseGameActivity {
@@ -110,7 +112,7 @@ public class GameActivity extends BaseGameActivity {
 	}
 
 	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals("jogar")) {

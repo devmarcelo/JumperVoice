@@ -31,6 +31,7 @@ import android.hardware.SensorManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import base.BaseScene;
+import manager.ResourcesManager;
 import manager.SceneManager;
 import manager.SceneManager.SceneType;
 
@@ -43,6 +44,9 @@ public class GameScene extends BaseScene implements IAccelerationListener, IOnSc
 	private AnimatedSprite starSprite;
 	private Body body;
 	private Body bodyStar;
+	
+	private Text gameOverText;
+	private boolean gameOverDisplayed = false;
 
 	private int score = 0;
 
@@ -68,9 +72,9 @@ public class GameScene extends BaseScene implements IAccelerationListener, IOnSc
 		createBackground();
 		createHUD();
 		createPhysics();
-		//loadLevel(1);
 		loadGame();
-		//createLocalBroadcastManager();
+		createLocalBroadcastManager();
+		createGameOverText();
 		setOnSceneTouchListener(this);
 	}
 
@@ -146,7 +150,10 @@ public class GameScene extends BaseScene implements IAccelerationListener, IOnSc
 				}
 
 				if (collidesWith(playerSprite)) {
-					//TODO: implementar
+					if (!gameOverDisplayed) {
+						displayGameOverText();
+						engine.stop();
+					}
 				}
 			}
 			
@@ -214,16 +221,31 @@ public class GameScene extends BaseScene implements IAccelerationListener, IOnSc
 		localBroadcastManager = LocalBroadcastManager.getInstance(activity.getApplicationContext());
 
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("pular");
+		intentFilter.addAction("pula");
 
-		localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+		localBroadcastManager.registerReceiver(getBroadcastReceiver(), intentFilter);
+	}
+
+	private BroadcastReceiver getBroadcastReceiver() {
+		if (broadcastReceiver == null) {
+			broadcastReceiver = new BroadcastReceiver() {
+				
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					if (intent.getAction().equals("pula")) {
+						setPlayerJumping();
+					}
+				}
+			};
+		}
+		return broadcastReceiver;
 	}
 
 	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals("pular")) {
+			if (intent.getAction().equals("pula")) {
 				setPlayerJumping();
 			}
 		}
@@ -242,6 +264,17 @@ public class GameScene extends BaseScene implements IAccelerationListener, IOnSc
 		final Vector2 gravity = Vector2Pool.obtain(gravityX, gravityY);
 		physicsWorld.setGravity(gravity);
 		Vector2Pool.recycle(gravity);
+	}
+
+	private void createGameOverText() {
+		gameOverText = new Text(0, 0, resourceManager.font, "Fim do Jogo!", vbom);
+	}
+
+	private void displayGameOverText() {
+		camera.setChaseEntity(null);
+		gameOverText.setPosition(camera.getCenterX(), camera.getCenterY());
+		attachChild(gameOverText);
+		gameOverDisplayed = true;
 	}
 
 }
